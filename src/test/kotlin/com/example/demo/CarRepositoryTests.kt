@@ -32,10 +32,14 @@ class CarRepositoryTests {
         carRepository.save(car2)
         carRepository.save(car3)
 
-        val ids = listOf(car1.id, car3.id)
+        val ids = listOf(car1.id, car2.id)
 
-        // This fails due to:
+        // This works fine.. (IdentifierToUuidConverter is called!)
+        carRepository.findById(car1.id)
+
+        // But this fails due to:
         // Caused by: org.postgresql.util.PSQLException: Can't infer the SQL type to use for an instance of com.example.demo.Identifier. Use setObject() with an explicit Types value to specify the type to use
+        // IdentifierToUuidConverter was never called
         val result = carRepository.findAllById(ids).toList()
 
         assertEquals(2, result.size)
